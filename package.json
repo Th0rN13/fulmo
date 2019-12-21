@@ -1,0 +1,29 @@
+{
+  "name": "fulmo",
+  "type": "module",
+  "version": "0.1.1",
+  "description": "fulmo",
+  "module": "build/index.mjs",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "author": "Th0r",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "cssnano": "^4.1.10",
+    "postcss": "^7.0.25",
+    "postcss-color-mod-function": "^3.0.3",
+    "postcss-load-config": "^2.1.0",
+    "postcss-nested": "^4.2.1",
+    "postcss-preset-env": "^6.7.0",
+    "rollup": "^1.27.13",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-svelte": "^5.1.1",
+    "svelte": "^3.16.5",
+    "svelte-preprocess": "^3.3.0"
+  }
+}
