@@ -1,6 +1,8 @@
 components
+- notify popup
 - checkbox
 - radio
+- slide toggle
 - select
 - modal
 - date\time picker
@@ -13,7 +15,4 @@ components
 - field
 
 Icons:
-- check
-- radio
 - loading
-- user
