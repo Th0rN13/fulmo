@@ -2,6 +2,7 @@ import svelte from 'rollup-plugin-svelte';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs'
 import sveltePreprocess from 'svelte-preprocess';
+
 import pkg from './package.json';
 
 const preprocess = sveltePreprocess({
@@ -11,7 +12,7 @@ const preprocess = sveltePreprocess({
 const name = 'fulmo';
 
 export default {
-  input: 'components/index.js',
+  input: 'cmp/index.js',
   output: [
     { file: pkg.module, 'format': 'es', name },
     { file: pkg.main, 'format': 'umd', name }
