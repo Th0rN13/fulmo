@@ -1,0 +1,21 @@
+name: Publish Documentation branch
+
+on:
+  push:
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'docs/*'
+
+jobs:
+  docs-build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - name: Build
+      run: npm i && cd docs && npm i && npm run export
