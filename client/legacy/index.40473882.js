@@ -6,7 +6,7 @@ import _getPrototypeOf from '@babel/runtime/helpers/esm/getPrototypeOf';
 import _assertThisInitialized from '@babel/runtime/helpers/esm/assertThisInitialized';
 import _inherits from '@babel/runtime/helpers/esm/inherits';
 import _slicedToArray from '@babel/runtime/helpers/esm/slicedToArray';
-import { A as AnimPage } from './_animate-page.bf91efe6.js';
+import { A as AnimPage } from './animate-page.bc3b5c2c.js';
 
 var file = "home/runner/work/fulmo/fulmo/cmp/Button.svelte";
 

@@ -32,7 +32,7 @@ function fly(node, _ref3) {
   };
 }
 
-var file = "src/routes/_animate-page.svelte";
+var file = "src/components/animate-page.svelte";
 
 function create_fragment(ctx) {
   var div;
@@ -61,7 +61,7 @@ function create_fragment(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(div, "class", "svelte-1qtbtnl");
+      attr_dev(div, "class", "svelte-1cyqay8");
       add_location(div, file, 4, 0, 63);
     },
     m: function mount(target, anchor) {

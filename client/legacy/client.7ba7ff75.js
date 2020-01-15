@@ -2291,14 +2291,14 @@ function (_SvelteComponentDev) {
 var ignore = [];
 var components = [{
   js: function js() {
-    return import('./index.7f6c55e0.js');
+    return import('./index.40473882.js');
   },
-  css: ["legacy/index.7f6c55e0.css","legacy/_animate-page.bf91efe6.css"]
+  css: ["legacy/index.40473882.css","legacy/animate-page.bc3b5c2c.css"]
 }, {
   js: function js() {
-    return import('./about.58c9d7df.js');
+    return import('./about.5250fed6.js');
   },
-  css: ["legacy/_animate-page.bf91efe6.css"]
+  css: ["legacy/animate-page.bc3b5c2c.css"]
 }];
 var routes = [{
   // index.svelte
