@@ -5,6 +5,9 @@ on:
     paths:
       - '.github/workflows/docs.yml'
       - 'docs/*'
+      - 'docs/*/*'
+      - 'docs/*/*/*'
+      - 'docs/*/*/*/*'
 
 jobs:
   docs-build-deploy:
