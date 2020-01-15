@@ -7,7 +7,7 @@ const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
 polka()
-  .use(
+  .use('/fulmo',
     compression({ threshold: 0 }),
     sirv('static', { dev }),
     sapper.middleware()
