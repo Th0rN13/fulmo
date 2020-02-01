@@ -1,5 +1,5 @@
 <script>
-  import SvgIcon from './SvgIcon';
+  import SvgIcon from './SvgIcon.svelte';
   export let checked = false;
   export let label;
 </script>

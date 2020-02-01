@@ -1,36 +1,42 @@
-components
-- button
-- input
-- checkbox
-- radio
-- slide toggle
+## Design system
 
-- form
-- field (label, input-type, validation, message)
-- dropdown
-- dropdown select (single\multi)
-- inline select (tags in input)
-- date picker
-- time picker
-- date\time picker
-- file upload
-- image upload
+Figma https://www.figma.com/file/TvCXAcbBexMd76HHJ26nyi/Fulmo-Design-System?node-id=0%3A1
 
-- tag
-- icon
-- pagination
-- table\grid
-- modal
-- tabs
-- tooltip
-- menu
+## Simple Components pack
+  - button
+  - input (text, password, textarea)
+  - checkbox
+  - radio
+  - slide toggle
+  - tag
+  - icon
+  - modal
+  - tabs
 
-- notify popup
-- modal
+## Form Components pack
+  - form
+  - field (label, input-type, validation, message)
+  - dropdown menu
+  - dropdown select (single\multi)
+  - inline select (tags in input)
+  - date picker
+  - time picker
+  - date\time picker
+  - file upload
+  - image upload
 
-Icons:
-- loading
-- check
-- lock
-- radio
-- user
+## Full Components pack
+  - pagination
+  - table\grid
+  - tooltip
+  - menu
+  - notify popup
+
+## Base Icons
+  - loading
+  - check (for checkbox)
+  - radio (for radio)
+  - lock (password)
+  - user (password)
+  - mail (email)
+  - error
