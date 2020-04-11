@@ -1,13 +1,16 @@
-import { i as init, s as safe_not_equal, f as dispatch_dev, S as SvelteComponentDev, h as element, t as text, j as claim_element, k as children, l as claim_text, m as detach_dev, o as attr_dev, T as toggle_class, q as add_location, r as insert_dev, u as append_dev, U as listen_dev, w as set_data_dev, V as prop_dev, n as noop, W as bubble, M as empty, X as svg_element, x as create_component, z as claim_component, B as mount_component, C as transition_in, D as transition_out, E as destroy_component, y as space, A as claim_space, F as group_outros, G as check_outros, a as _inherits$1, b as _classCallCheck$1, c as _possibleConstructorReturn$1, d as _getPrototypeOf$1, e as _assertThisInitialized$1, N as query_selector_all, v as _slicedToArray$1 } from './index.b5677b82.js';
+import { i as init, s as safe_not_equal, d as dispatch_dev, S as SvelteComponentDev, v as validate_slots, e as element, t as text, c as claim_element, a as children, b as claim_text, f as detach_dev, g as attr_dev, h as toggle_class, j as add_location, k as insert_dev, l as append_dev, m as listen_dev, n as set_data_dev, p as prop_dev, o as noop, q as bubble, r as empty, u as svg_element, w as create_component, x as claim_component, y as mount_component, z as transition_in, A as transition_out, B as destroy_component, C as space, D as claim_space, E as group_outros, F as check_outros, _ as _inherits$1, G as _classCallCheck$1, H as _assertThisInitialized$1, I as _getPrototypeOf$1, J as _possibleConstructorReturn$1, K as query_selector_all, L as _slicedToArray$1 } from './client.4961f299.js';
 import _classCallCheck from '@babel/runtime/helpers/esm/classCallCheck';
 import _createClass from '@babel/runtime/helpers/esm/createClass';
-import _possibleConstructorReturn from '@babel/runtime/helpers/esm/possibleConstructorReturn';
-import _getPrototypeOf from '@babel/runtime/helpers/esm/getPrototypeOf';
 import _assertThisInitialized from '@babel/runtime/helpers/esm/assertThisInitialized';
 import _inherits from '@babel/runtime/helpers/esm/inherits';
+import _possibleConstructorReturn from '@babel/runtime/helpers/esm/possibleConstructorReturn';
+import _getPrototypeOf from '@babel/runtime/helpers/esm/getPrototypeOf';
 import _slicedToArray from '@babel/runtime/helpers/esm/slicedToArray';
-import { A as AnimPage } from './animate-page.bc3b5c2c.js';
+import { A as AnimPage } from './animate-page.ed1e4385.js';
 
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file = "home/runner/work/fulmo/fulmo/cmp/Button.svelte";
 
 function create_fragment(ctx) {
@@ -38,7 +41,7 @@ function create_fragment(ctx) {
       button.disabled =
       /*disabled*/
       ctx[1];
-      attr_dev(button, "class", "button svelte-1rmh7gq");
+      attr_dev(button, "class", "button svelte-12a58e4");
       toggle_class(button, "disabled",
       /*disabled*/
       ctx[1]);
@@ -47,9 +50,10 @@ function create_fragment(ctx) {
       ctx[2]);
       add_location(button, file, 6, 0, 101);
     },
-    m: function mount(target, anchor) {
+    m: function mount(target, anchor, remount) {
       insert_dev(target, button, anchor);
       append_dev(button, t);
+      if (remount) dispose();
       dispose = listen_dev(button, "click",
       /*click_handler*/
       ctx[3], false, false, false);
@@ -115,6 +119,10 @@ function instance($$self, $$props, $$invalidate) {
   Object.keys($$props).forEach(function (key) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<Button> was created with unknown prop '".concat(key, "'"));
   });
+  var _$$props$$$slots = $$props.$$slots,
+      $$slots = _$$props$$$slots === void 0 ? {} : _$$props$$$slots,
+      $$scope = $$props.$$scope;
+  validate_slots("Button", $$slots, []);
 
   function click_handler(event) {
     bubble($$self, event);
@@ -140,20 +148,24 @@ function instance($$self, $$props, $$invalidate) {
     if ("loading" in $$props) $$invalidate(2, loading = $$props.loading);
   };
 
+  if ($$props && "$$inject" in $$props) {
+    $$self.$inject_state($$props.$$inject);
+  }
+
   return [title, disabled, loading, click_handler];
 }
 
-var Button =
-/*#__PURE__*/
-function (_SvelteComponentDev) {
+var Button = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(Button, _SvelteComponentDev);
+
+  var _super = _createSuper(Button);
 
   function Button(options) {
     var _this;
 
     _classCallCheck(this, Button);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Button).call(this, options));
+    _this = _super.call(this, options);
     init(_assertThisInitialized(_this), options, instance, create_fragment, safe_not_equal, {
       title: 0,
       disabled: 1,
@@ -206,6 +218,9 @@ function (_SvelteComponentDev) {
   return Button;
 }(SvelteComponentDev);
 
+function _createSuper$1(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$1()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file$1 = "home/runner/work/fulmo/fulmo/cmp/SvgIcon.svelte"; // (34:15) 
 
 function create_if_block_3(ctx) {
@@ -490,6 +505,10 @@ function instance$1($$self, $$props, $$invalidate) {
   Object.keys($$props).forEach(function (key) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<SvgIcon> was created with unknown prop '".concat(key, "'"));
   });
+  var _$$props$$$slots = $$props.$$slots,
+      $$slots = _$$props$$$slots === void 0 ? {} : _$$props$$$slots,
+      $$scope = $$props.$$scope;
+  validate_slots("SvgIcon", $$slots, []);
 
   $$self.$set = function ($$props) {
     if ("check" in $$props) $$invalidate(0, check = $$props.check);
@@ -505,7 +524,8 @@ function instance$1($$self, $$props, $$invalidate) {
       lock: lock,
       radio: radio,
       user: user,
-      icon: icon
+      icon: icon,
+      iconSet: iconSet
     };
   };
 
@@ -516,6 +536,10 @@ function instance$1($$self, $$props, $$invalidate) {
     if ("user" in $$props) $$invalidate(3, user = $$props.user);
     if ("icon" in $$props) $$invalidate(4, icon = $$props.icon);
   };
+
+  if ($$props && "$$inject" in $$props) {
+    $$self.$inject_state($$props.$$inject);
+  }
 
   $$self.$$.update = function () {
     if ($$self.$$.dirty &
@@ -528,17 +552,17 @@ function instance$1($$self, $$props, $$invalidate) {
   return [check, lock, radio, user, icon];
 }
 
-var SvgIcon =
-/*#__PURE__*/
-function (_SvelteComponentDev) {
+var SvgIcon = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(SvgIcon, _SvelteComponentDev);
+
+  var _super = _createSuper$1(SvgIcon);
 
   function SvgIcon(options) {
     var _this;
 
     _classCallCheck(this, SvgIcon);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(SvgIcon).call(this, options));
+    _this = _super.call(this, options);
     init(_assertThisInitialized(_this), options, instance$1, create_fragment$1, safe_not_equal, {
       check: 0,
       lock: 1,
@@ -609,6 +633,9 @@ function (_SvelteComponentDev) {
   return SvgIcon;
 }(SvelteComponentDev);
 
+function _createSuper$2(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$2()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file$2 = "home/runner/work/fulmo/fulmo/cmp/Checkbox.svelte"; // (10:4) {#if checked}
 
 function create_if_block$1(ctx) {
@@ -709,15 +736,15 @@ function create_fragment$2(ctx) {
       input.checked =
       /*checked*/
       ctx[0];
-      attr_dev(input, "class", "svelte-1ccwnzz");
-      add_location(input, file$2, 7, 2, 115);
-      attr_dev(div, "class", "border svelte-1ccwnzz");
+      attr_dev(input, "class", "svelte-152445p");
+      add_location(input, file$2, 7, 2, 122);
+      attr_dev(div, "class", "border svelte-152445p");
       toggle_class(div, "checked",
       /*checked*/
       ctx[0]);
-      add_location(div, file$2, 8, 2, 152);
-      add_location(p, file$2, 13, 2, 256);
-      add_location(label_1, file$2, 6, 0, 105);
+      add_location(div, file$2, 8, 2, 159);
+      add_location(p, file$2, 13, 2, 263);
+      add_location(label_1, file$2, 6, 0, 112);
     },
     m: function mount(target, anchor) {
       insert_dev(target, label_1, anchor);
@@ -807,6 +834,10 @@ function instance$2($$self, $$props, $$invalidate) {
   Object.keys($$props).forEach(function (key) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<Checkbox> was created with unknown prop '".concat(key, "'"));
   });
+  var _$$props$$$slots = $$props.$$slots,
+      $$slots = _$$props$$$slots === void 0 ? {} : _$$props$$$slots,
+      $$scope = $$props.$$scope;
+  validate_slots("Checkbox", $$slots, []);
 
   $$self.$set = function ($$props) {
     if ("checked" in $$props) $$invalidate(0, checked = $$props.checked);
@@ -815,6 +846,7 @@ function instance$2($$self, $$props, $$invalidate) {
 
   $$self.$capture_state = function () {
     return {
+      SvgIcon: SvgIcon,
       checked: checked,
       label: label
     };
@@ -825,20 +857,24 @@ function instance$2($$self, $$props, $$invalidate) {
     if ("label" in $$props) $$invalidate(1, label = $$props.label);
   };
 
+  if ($$props && "$$inject" in $$props) {
+    $$self.$inject_state($$props.$$inject);
+  }
+
   return [checked, label];
 }
 
-var Checkbox =
-/*#__PURE__*/
-function (_SvelteComponentDev) {
+var Checkbox = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(Checkbox, _SvelteComponentDev);
+
+  var _super = _createSuper$2(Checkbox);
 
   function Checkbox(options) {
     var _this;
 
     _classCallCheck(this, Checkbox);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Checkbox).call(this, options));
+    _this = _super.call(this, options);
     init(_assertThisInitialized(_this), options, instance$2, create_fragment$2, safe_not_equal, {
       checked: 0,
       label: 1
@@ -881,6 +917,10 @@ function (_SvelteComponentDev) {
 
   return Checkbox;
 }(SvelteComponentDev);
+
+function _createSuper$3(Derived) { return function () { var Super = _getPrototypeOf$1(Derived), result; if (_isNativeReflectConstruct$3()) { var NewTarget = _getPrototypeOf$1(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn$1(this, result); }; }
+
+function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function create_default_slot(ctx) {
   var t0;
@@ -1036,18 +1076,39 @@ function create_fragment$3(ctx) {
   return block;
 }
 
-var Routes =
-/*#__PURE__*/
-function (_SvelteComponentDev) {
+function instance$3($$self, $$props, $$invalidate) {
+  var writable_props = [];
+  Object.keys($$props).forEach(function (key) {
+    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<Routes> was created with unknown prop '".concat(key, "'"));
+  });
+  var _$$props$$$slots = $$props.$$slots,
+      $$slots = _$$props$$$slots === void 0 ? {} : _$$props$$$slots,
+      $$scope = $$props.$$scope;
+  validate_slots("Routes", $$slots, []);
+
+  $$self.$capture_state = function () {
+    return {
+      Button: Button,
+      Checkbox: Checkbox,
+      AnimPage: AnimPage
+    };
+  };
+
+  return [];
+}
+
+var Routes = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits$1(Routes, _SvelteComponentDev);
+
+  var _super = _createSuper$3(Routes);
 
   function Routes(options) {
     var _this;
 
     _classCallCheck$1(this, Routes);
 
-    _this = _possibleConstructorReturn$1(this, _getPrototypeOf$1(Routes).call(this, options));
-    init(_assertThisInitialized$1(_this), options, null, create_fragment$3, safe_not_equal, {});
+    _this = _super.call(this, options);
+    init(_assertThisInitialized$1(_this), options, instance$3, create_fragment$3, safe_not_equal, {});
     dispatch_dev("SvelteRegisterComponent", {
       component: _assertThisInitialized$1(_this),
       tagName: "Routes",

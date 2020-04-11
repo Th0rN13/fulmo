@@ -1,5 +1,9 @@
-import { a as _inherits, b as _classCallCheck, c as _possibleConstructorReturn, d as _getPrototypeOf, i as init, s as safe_not_equal, e as _assertThisInitialized, f as dispatch_dev, S as SvelteComponentDev, y as space, x as create_component, N as query_selector_all, m as detach_dev, A as claim_space, z as claim_component, r as insert_dev, B as mount_component, v as _slicedToArray, C as transition_in, D as transition_out, E as destroy_component, t as text, l as claim_text } from './index.b5677b82.js';
-import { A as AnimPage } from './animate-page.bc3b5c2c.js';
+import { _ as _inherits, G as _classCallCheck, i as init, s as safe_not_equal, H as _assertThisInitialized, d as dispatch_dev, S as SvelteComponentDev, v as validate_slots, I as _getPrototypeOf, J as _possibleConstructorReturn, C as space, w as create_component, K as query_selector_all, f as detach_dev, D as claim_space, x as claim_component, k as insert_dev, y as mount_component, L as _slicedToArray, z as transition_in, A as transition_out, B as destroy_component, t as text, b as claim_text } from './client.4961f299.js';
+import { A as AnimPage } from './animate-page.ed1e4385.js';
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function create_default_slot(ctx) {
   var t;
@@ -103,18 +107,37 @@ function create_fragment(ctx) {
   return block;
 }
 
-var About =
-/*#__PURE__*/
-function (_SvelteComponentDev) {
+function instance($$self, $$props, $$invalidate) {
+  var writable_props = [];
+  Object.keys($$props).forEach(function (key) {
+    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<About> was created with unknown prop '".concat(key, "'"));
+  });
+  var _$$props$$$slots = $$props.$$slots,
+      $$slots = _$$props$$$slots === void 0 ? {} : _$$props$$$slots,
+      $$scope = $$props.$$scope;
+  validate_slots("About", $$slots, []);
+
+  $$self.$capture_state = function () {
+    return {
+      AnimPage: AnimPage
+    };
+  };
+
+  return [];
+}
+
+var About = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(About, _SvelteComponentDev);
+
+  var _super = _createSuper(About);
 
   function About(options) {
     var _this;
 
     _classCallCheck(this, About);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(About).call(this, options));
-    init(_assertThisInitialized(_this), options, null, create_fragment, safe_not_equal, {});
+    _this = _super.call(this, options);
+    init(_assertThisInitialized(_this), options, instance, create_fragment, safe_not_equal, {});
     dispatch_dev("SvelteRegisterComponent", {
       component: _assertThisInitialized(_this),
       tagName: "About",
