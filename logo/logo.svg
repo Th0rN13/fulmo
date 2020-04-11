@@ -1,21 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100">
   <path
     d="M50,10 L83,30 83,70 50,90 17,70 17,30z"
-    fill="orange"
-    stroke="orange"
-    stroke-width="10"
+    fill="#ff9f43"
+    stroke="#ff9f43"
+    stroke-width="12"
     stroke-linecap="round"
     stroke-linejoin="round"
   >
   </path>
   <path
     d="M28.5,96 L24,63 35,63 41,49.5 26,49.5 65,7 95,7 66,8 48,40 85,40 61.5,41 50,63 64,63z"
-    fill="white"
-    stroke="black"
-    stroke-width="5"
+    fill="#48dbfb"
+    stroke="#222f3e"
+    stroke-width="4"
     stroke-linecap="round"
     stroke-linejoin="round"
   >
   </path>
 </svg>
-

@@ -1,4 +1,6 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
   export let value = '';
   export let disabled = false;
   export let label = 'Label';
@@ -8,6 +10,13 @@
 
   function handleFocus (value) {
     isFocused = value;
+  }
+
+  function onKeyPress (event) {
+    switch (event.key) {
+      case 'Enter': dispatch('enter'); break;
+      case 'Escape': dispatch('escape'); break;
+    }
   }
 </script>
 
@@ -30,6 +39,7 @@
       {disabled}
       on:focus={() => {handleFocus(true)}}
       on:blur={() => {handleFocus(false)}}
+      on:keydown={onKeyPress}
     />
   {:else}
     <input
@@ -39,6 +49,7 @@
       {disabled}
       on:focus={() => {handleFocus(true)}}
       on:blur={() => {handleFocus(false)}}
+      on:keydown={onKeyPress}
     />
   {/if}
 </label>
