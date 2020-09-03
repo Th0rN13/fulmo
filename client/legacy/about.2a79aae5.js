@@ -1,7 +1,7 @@
-import { _ as _inherits, G as _classCallCheck, i as init, s as safe_not_equal, H as _assertThisInitialized, d as dispatch_dev, S as SvelteComponentDev, v as validate_slots, I as _getPrototypeOf, J as _possibleConstructorReturn, C as space, w as create_component, K as query_selector_all, f as detach_dev, D as claim_space, x as claim_component, k as insert_dev, y as mount_component, L as _slicedToArray, z as transition_in, A as transition_out, B as destroy_component, t as text, b as claim_text } from './client.4961f299.js';
-import { A as AnimPage } from './animate-page.ed1e4385.js';
+import { _ as _inherits, G as _getPrototypeOf, H as _possibleConstructorReturn, I as _classCallCheck, i as init, s as safe_not_equal, J as _assertThisInitialized, d as dispatch_dev, S as SvelteComponentDev, v as validate_slots, C as space, w as create_component, K as query_selector_all, f as detach_dev, D as claim_space, x as claim_component, k as insert_dev, y as mount_component, L as _slicedToArray, z as transition_in, A as transition_out, B as destroy_component, t as text, b as claim_text } from './client.3019c3ea.js';
+import { A as AnimPage } from './animate-page.546de473.js';
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -33,8 +33,9 @@ function create_default_slot(ctx) {
 
 function create_fragment(ctx) {
   var t;
+  var animpage;
   var current;
-  var animpage = new AnimPage({
+  animpage = new AnimPage({
     props: {
       $$slots: {
         default: [create_default_slot]

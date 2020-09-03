@@ -1,4 +1,4 @@
-import { _ as _inherits, G as _classCallCheck, i as init, s as safe_not_equal, H as _assertThisInitialized, d as dispatch_dev, S as SvelteComponentDev, M as create_slot, v as validate_slots, I as _getPrototypeOf, J as _possibleConstructorReturn, e as element, c as claim_element, a as children, f as detach_dev, g as attr_dev, j as add_location, k as insert_dev, L as _slicedToArray, N as get_slot_context, O as get_slot_changes, z as transition_in, P as add_render_callback, Q as create_in_transition, A as transition_out, R as create_out_transition } from './client.4961f299.js';
+import { _ as _inherits, G as _getPrototypeOf, H as _possibleConstructorReturn, I as _classCallCheck, i as init, s as safe_not_equal, J as _assertThisInitialized, d as dispatch_dev, S as SvelteComponentDev, M as create_slot, v as validate_slots, e as element, c as claim_element, a as children, f as detach_dev, g as attr_dev, j as add_location, k as insert_dev, L as _slicedToArray, N as update_slot, z as transition_in, O as add_render_callback, P as create_in_transition, A as transition_out, Q as create_out_transition } from './client.3019c3ea.js';
 
 function cubicOut(t) {
   var f = t - 1.0;
@@ -32,7 +32,7 @@ function fly(node, _ref3) {
   };
 }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file = "src/components/animate-page.svelte";
@@ -64,7 +64,7 @@ function create_fragment(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(div, "class", "svelte-s7uz18");
+      attr_dev(div, "class", "svelte-syoa7u");
       add_location(div, file, 4, 0, 63);
     },
     m: function mount(target, anchor) {
@@ -84,11 +84,9 @@ function create_fragment(ctx) {
         if (default_slot.p && dirty &
         /*$$scope*/
         1) {
-          default_slot.p(get_slot_context(default_slot_template, ctx,
+          update_slot(default_slot, default_slot_template, ctx,
           /*$$scope*/
-          ctx[0], null), get_slot_changes(default_slot_template,
-          /*$$scope*/
-          ctx[0], dirty, null));
+          ctx[0], dirty, null, null);
         }
       }
     },
@@ -140,7 +138,7 @@ function instance($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("Animate_page", $$slots, ['default']);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("$$scope" in $$props) $$invalidate(0, $$scope = $$props.$$scope);
   };
 

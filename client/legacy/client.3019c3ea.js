@@ -60,7 +60,7 @@ function _unsupportedIterableToArray(o, minLen) {
   if (typeof o === "string") return _arrayLikeToArray(o, minLen);
   var n = Object.prototype.toString.call(o).slice(8, -1);
   if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(n);
+  if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
 
@@ -93,6 +93,25 @@ var runtime_1 = createCommonjsModule(function (module) {
     var iteratorSymbol = $Symbol.iterator || "@@iterator";
     var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
     var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+    function define(obj, key, value) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+      return obj[key];
+    }
+
+    try {
+      // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+      define({}, "");
+    } catch (err) {
+      define = function define(obj, key, value) {
+        return obj[key] = value;
+      };
+    }
 
     function wrap(innerFn, outerFn, self, tryLocsList) {
       // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
@@ -167,14 +186,14 @@ var runtime_1 = createCommonjsModule(function (module) {
     var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
     GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
     GeneratorFunctionPrototype.constructor = GeneratorFunction;
-    GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction"; // Helper for defining the .next, .throw, and .return methods of the
+    GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"); // Helper for defining the .next, .throw, and .return methods of the
     // Iterator interface in terms of a single ._invoke method.
 
     function defineIteratorMethods(prototype) {
       ["next", "throw", "return"].forEach(function (method) {
-        prototype[method] = function (arg) {
+        define(prototype, method, function (arg) {
           return this._invoke(method, arg);
-        };
+        });
       });
     }
 
@@ -190,10 +209,7 @@ var runtime_1 = createCommonjsModule(function (module) {
         Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
       } else {
         genFun.__proto__ = GeneratorFunctionPrototype;
-
-        if (!(toStringTagSymbol in genFun)) {
-          genFun[toStringTagSymbol] = "GeneratorFunction";
-        }
+        define(genFun, toStringTagSymbol, "GeneratorFunction");
       }
 
       genFun.prototype = Object.create(Gp);
@@ -449,7 +465,7 @@ var runtime_1 = createCommonjsModule(function (module) {
 
 
     defineIteratorMethods(Gp);
-    Gp[toStringTagSymbol] = "Generator"; // A Generator should always return itself as the iterator object when the
+    define(Gp, toStringTagSymbol, "Generator"); // A Generator should always return itself as the iterator object when the
     // @@iterator function is called on it. Some browsers' implementations of the
     // iterator prototype chain incorrectly implement this, causing the Generator
     // object to not be returned from this call. This ensures that doesn't happen.
@@ -936,7 +952,7 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -986,6 +1002,10 @@ function safe_not_equal(a, b) {
   return a != a ? b == b : a !== b || a && _typeof(a) === 'object' || typeof a === 'function';
 }
 
+function is_empty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
 function create_slot(definition, ctx, $$scope, fn) {
   if (definition) {
     var slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
@@ -1020,6 +1040,15 @@ function get_slot_changes(definition, $$scope, dirty, fn) {
   }
 
   return $$scope.dirty;
+}
+
+function update_slot(slot, slot_definition, ctx, $$scope, dirty, get_slot_changes_fn, get_slot_context_fn) {
+  var slot_changes = get_slot_changes(slot_definition, $$scope, dirty, get_slot_changes_fn);
+
+  if (slot_changes) {
+    var slot_context = get_slot_context(slot_definition, ctx, $$scope, get_slot_context_fn);
+    slot.p(slot_context, slot_changes);
+  }
 }
 
 function null_to_empty(value) {
@@ -1128,15 +1157,18 @@ function claim_element(nodes, name, attributes, svg) {
 
     if (node.nodeName === name) {
       var j = 0;
+      var remove = [];
 
       while (j < node.attributes.length) {
-        var attribute = node.attributes[j];
+        var attribute = node.attributes[j++];
 
-        if (attributes[attribute.name]) {
-          j++;
-        } else {
-          node.removeAttribute(attribute.name);
+        if (!attributes[attribute.name]) {
+          remove.push(attribute.name);
         }
+      }
+
+      for (var k = 0; k < remove.length; k++) {
+        node.removeAttribute(remove[k]);
       }
 
       return nodes.splice(i, 1)[0];
@@ -1264,6 +1296,10 @@ function set_current_component(component) {
 function get_current_component() {
   if (!current_component) throw new Error("Function called outside component initialization");
   return current_component;
+}
+
+function afterUpdate(fn) {
+  get_current_component().$$.after_update.push(fn);
 }
 
 function setContext(key, context) {
@@ -1573,7 +1609,7 @@ function create_out_transition(node, fn, params) {
   };
 }
 
-var globals = typeof window !== 'undefined' ? window : global;
+var globals = typeof window !== 'undefined' ? window : typeof globalThis !== 'undefined' ? globalThis : global;
 
 function get_spread_update(levels, updates) {
   var update = {};
@@ -1694,14 +1730,15 @@ function init(component, options, instance, create_fragment, not_equal, props) {
     context: new Map(parent_component ? parent_component.$$.context : []),
     // everything else
     callbacks: blank_object(),
-    dirty: dirty
+    dirty: dirty,
+    skip_bound: false
   };
   var ready = false;
   $$.ctx = instance ? instance(component, prop_values, function (i, ret) {
     var value = (arguments.length <= 2 ? 0 : arguments.length - 2) ? arguments.length <= 2 ? undefined : arguments[2] : ret;
 
     if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
-      if ($$.bound[i]) $$.bound[i](value);
+      if (!$$.skip_bound && $$.bound[i]) $$.bound[i](value);
       if (ready) make_dirty(component, i);
     }
 
@@ -1755,7 +1792,12 @@ var SvelteComponent = /*#__PURE__*/function () {
     }
   }, {
     key: "$set",
-    value: function $set() {// overridden by instance, if it has props
+    value: function $set($$props) {
+      if (this.$$set && !is_empty($$props)) {
+        this.$$.skip_bound = true;
+        this.$$set($$props);
+        this.$$.skip_bound = false;
+      }
     }
   }]);
 
@@ -1764,7 +1806,7 @@ var SvelteComponent = /*#__PURE__*/function () {
 
 function dispatch_dev(type, detail) {
   document.dispatchEvent(custom_event(type, Object.assign({
-    version: '3.20.1'
+    version: '3.24.1'
   }, detail)));
 }
 
@@ -1837,7 +1879,7 @@ function prop_dev(node, property, value) {
 
 function set_data_dev(text, data) {
   data = '' + data;
-  if (text.data === data) return;
+  if (text.wholeText === data) return;
   dispatch_dev("SvelteDOMSetData", {
     node: text,
     data: data
@@ -1980,7 +2022,7 @@ var preload = function preload() {
   return {};
 };
 
-function _createSuper$1(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$1()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file = "src/components/UI/NavLink.svelte";
@@ -2014,7 +2056,7 @@ function create_fragment(ctx) {
       attr_dev(a, "rel", "prefetch");
       attr_dev(a, "class", a_class_value = "" + (null_to_empty(
       /*selected*/
-      ctx[0] ? "selected" : "") + " svelte-ply0u5"));
+      ctx[0] ? "selected" : "") + " svelte-xpz5f2"));
       attr_dev(a, "href",
       /*href*/
       ctx[1]);
@@ -2038,7 +2080,7 @@ function create_fragment(ctx) {
       /*selected*/
       1 && a_class_value !== (a_class_value = "" + (null_to_empty(
       /*selected*/
-      ctx[0] ? "selected" : "") + " svelte-ply0u5"))) {
+      ctx[0] ? "selected" : "") + " svelte-xpz5f2"))) {
         attr_dev(a, "class", a_class_value);
       }
 
@@ -2079,7 +2121,7 @@ function instance($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("NavLink", $$slots, []);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("selected" in $$props) $$invalidate(0, selected = $$props.selected);
     if ("href" in $$props) $$invalidate(1, href = $$props.href);
     if ("name" in $$props) $$invalidate(2, name = $$props.name);
@@ -2181,7 +2223,7 @@ var NavLink = /*#__PURE__*/function (_SvelteComponentDev) {
   return NavLink;
 }(SvelteComponentDev);
 
-function _createSuper$2(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$2()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file$1 = "src/components/Nav.svelte";
@@ -2195,9 +2237,10 @@ function get_each_context(ctx, list, i) {
 
 function create_each_block(ctx) {
   var li;
+  var navlink;
   var t;
   var current;
-  var navlink = new NavLink({
+  navlink = new NavLink({
     props: {
       selected:
       /*segment*/
@@ -2235,7 +2278,7 @@ function create_each_block(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(li, "class", "nav__item svelte-104soqp");
+      attr_dev(li, "class", "nav__item svelte-fdb7qa");
       add_location(li, file$1, 32, 4, 476);
     },
     m: function mount(target, anchor) {
@@ -2333,9 +2376,9 @@ function create_fragment$1(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(ul, "class", "nav__list svelte-104soqp");
+      attr_dev(ul, "class", "nav__list svelte-fdb7qa");
       add_location(ul, file$1, 30, 2, 423);
-      attr_dev(nav, "class", "nav svelte-104soqp");
+      attr_dev(nav, "class", "nav svelte-fdb7qa");
       add_location(nav, file$1, 29, 0, 403);
     },
     m: function mount(target, anchor) {
@@ -2450,7 +2493,7 @@ function instance$1($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("Nav", $$slots, []);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("segment" in $$props) $$invalidate(0, segment = $$props.segment);
   };
 
@@ -2530,16 +2573,17 @@ var Nav = /*#__PURE__*/function (_SvelteComponentDev) {
   return Nav;
 }(SvelteComponentDev);
 
-function _createSuper$3(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$3()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file$2 = "src/routes/_layout.svelte";
 
 function create_fragment$2(ctx) {
+  var nav;
   var t;
   var main;
   var current;
-  var nav = new Nav({
+  nav = new Nav({
     props: {
       segment:
       /*segment*/
@@ -2573,7 +2617,7 @@ function create_fragment$2(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(main, "class", "svelte-xfftq7");
+      attr_dev(main, "class", "svelte-15z4ut5");
       add_location(main, file$2, 6, 0, 103);
     },
     m: function mount(target, anchor) {
@@ -2603,11 +2647,9 @@ function create_fragment$2(ctx) {
         if (default_slot.p && dirty &
         /*$$scope*/
         2) {
-          default_slot.p(get_slot_context(default_slot_template, ctx,
+          update_slot(default_slot, default_slot_template, ctx,
           /*$$scope*/
-          ctx[1], null), get_slot_changes(default_slot_template,
-          /*$$scope*/
-          ctx[1], dirty, null));
+          ctx[1], dirty, null, null);
         }
       }
     },
@@ -2650,7 +2692,7 @@ function instance$2($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("Layout", $$slots, ['default']);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("segment" in $$props) $$invalidate(0, segment = $$props.segment);
     if ("$$scope" in $$props) $$invalidate(1, $$scope = $$props.$$scope);
   };
@@ -2718,11 +2760,11 @@ var Layout = /*#__PURE__*/function (_SvelteComponentDev) {
   return Layout;
 }(SvelteComponentDev);
 
-function _createSuper$4(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$4()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var Error_1 = globals.Error;
-var file$3 = "src/routes/_error.svelte"; // (19:0) {#if dev && error.stack}
+var file$3 = "src/routes/_error.svelte"; // (18:0) {#if dev && error.stack}
 
 function create_if_block(ctx) {
   var pre;
@@ -2744,7 +2786,7 @@ function create_if_block(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(pre, file$3, 19, 2, 1021);
+      add_location(pre, file$3, 18, 2, 383);
     },
     m: function mount(target, anchor) {
       insert_dev(target, pre, anchor);
@@ -2765,7 +2807,7 @@ function create_if_block(ctx) {
     block: block,
     id: create_if_block.name,
     type: "if",
-    source: "(19:0) {#if dev && error.stack}",
+    source: "(18:0) {#if dev && error.stack}",
     ctx: ctx
   });
   return block;
@@ -2832,10 +2874,10 @@ function create_fragment$3(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(h1, "class", "svelte-9p73y5");
-      add_location(h1, file$3, 14, 0, 951);
-      attr_dev(p, "class", "svelte-9p73y5");
-      add_location(p, file$3, 16, 0, 970);
+      attr_dev(h1, "class", "svelte-be3lyz");
+      add_location(h1, file$3, 13, 0, 313);
+      attr_dev(p, "class", "svelte-be3lyz");
+      add_location(p, file$3, 15, 0, 332);
     },
     m: function mount(target, anchor) {
       insert_dev(target, t0, anchor);
@@ -2923,7 +2965,7 @@ function instance$3($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("Error", $$slots, []);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("status" in $$props) $$invalidate(0, status = $$props.status);
     if ("error" in $$props) $$invalidate(1, error = $$props.error);
   };
@@ -3008,12 +3050,13 @@ var Error$1 = /*#__PURE__*/function (_SvelteComponentDev) {
   return Error;
 }(SvelteComponentDev);
 
-function _createSuper$5(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$5()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var Error_1$1 = globals.Error;
 
 function create_else_block(ctx) {
+  var switch_instance;
   var switch_instance_anchor;
   var current;
   var switch_instance_spread_levels = [
@@ -3037,7 +3080,7 @@ function create_else_block(ctx) {
   }
 
   if (switch_value) {
-    var switch_instance = new switch_value(switch_props());
+    switch_instance = new switch_value(switch_props());
   }
 
   var block = {
@@ -3106,16 +3149,17 @@ function create_else_block(ctx) {
     block: block,
     id: create_else_block.name,
     type: "else",
-    source: "(21:1) {:else}",
+    source: "(23:1) {:else}",
     ctx: ctx
   });
   return block;
-} // (19:1) {#if error}
+} // (21:1) {#if error}
 
 
 function create_if_block$1(ctx) {
+  var error_1;
   var current;
-  var error_1 = new Error$1({
+  error_1 = new Error$1({
     props: {
       error:
       /*error*/
@@ -3168,11 +3212,11 @@ function create_if_block$1(ctx) {
     block: block,
     id: create_if_block$1.name,
     type: "if",
-    source: "(19:1) {#if error}",
+    source: "(21:1) {#if error}",
     ctx: ctx
   });
   return block;
-} // (18:0) <Layout segment="{segments[0]}" {...level0.props}>
+} // (20:0) <Layout segment="{segments[0]}" {...level0.props}>
 
 
 function create_default_slot(ctx) {
@@ -3247,13 +3291,14 @@ function create_default_slot(ctx) {
     block: block,
     id: create_default_slot.name,
     type: "slot",
-    source: "(18:0) <Layout segment=\\\"{segments[0]}\\\" {...level0.props}>",
+    source: "(20:0) <Layout segment=\\\"{segments[0]}\\\" {...level0.props}>",
     ctx: ctx
   });
   return block;
 }
 
 function create_fragment$4(ctx) {
+  var layout;
   var current;
   var layout_spread_levels = [{
     segment:
@@ -3275,7 +3320,7 @@ function create_fragment$4(ctx) {
     layout_props = assign(layout_props, layout_spread_levels[i]);
   }
 
-  var layout = new Layout({
+  layout = new Layout({
     props: layout_props,
     $$inline: true
   });
@@ -3310,7 +3355,7 @@ function create_fragment$4(ctx) {
 
       if (dirty &
       /*$$scope, error, status, level1*/
-      83) {
+      147) {
         layout_changes.$$scope = {
           dirty: dirty,
           ctx: ctx
@@ -3350,8 +3395,10 @@ function instance$4($$self, $$props, $$invalidate) {
   var level0 = $$props.level0;
   var _$$props$level = $$props.level1,
       level1 = _$$props$level === void 0 ? null : _$$props$level;
+  var notify = $$props.notify;
+  afterUpdate(notify);
   setContext(CONTEXT_KEY, stores);
-  var writable_props = ["stores", "error", "status", "segments", "level0", "level1"];
+  var writable_props = ["stores", "error", "status", "segments", "level0", "level1", "notify"];
   Object.keys($$props).forEach(function (key) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn("<App> was created with unknown prop '".concat(key, "'"));
   });
@@ -3360,18 +3407,20 @@ function instance$4($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("App", $$slots, []);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("stores" in $$props) $$invalidate(5, stores = $$props.stores);
     if ("error" in $$props) $$invalidate(0, error = $$props.error);
     if ("status" in $$props) $$invalidate(1, status = $$props.status);
     if ("segments" in $$props) $$invalidate(2, segments = $$props.segments);
     if ("level0" in $$props) $$invalidate(3, level0 = $$props.level0);
     if ("level1" in $$props) $$invalidate(4, level1 = $$props.level1);
+    if ("notify" in $$props) $$invalidate(6, notify = $$props.notify);
   };
 
   $$self.$capture_state = function () {
     return {
       setContext: setContext,
+      afterUpdate: afterUpdate,
       CONTEXT_KEY: CONTEXT_KEY,
       Layout: Layout,
       Error: Error$1,
@@ -3380,7 +3429,8 @@ function instance$4($$self, $$props, $$invalidate) {
       status: status,
       segments: segments,
       level0: level0,
-      level1: level1
+      level1: level1,
+      notify: notify
     };
   };
 
@@ -3391,13 +3441,14 @@ function instance$4($$self, $$props, $$invalidate) {
     if ("segments" in $$props) $$invalidate(2, segments = $$props.segments);
     if ("level0" in $$props) $$invalidate(3, level0 = $$props.level0);
     if ("level1" in $$props) $$invalidate(4, level1 = $$props.level1);
+    if ("notify" in $$props) $$invalidate(6, notify = $$props.notify);
   };
 
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
   }
 
-  return [error, status, segments, level0, level1, stores];
+  return [error, status, segments, level0, level1, stores, notify];
 }
 
 var App = /*#__PURE__*/function (_SvelteComponentDev) {
@@ -3417,7 +3468,8 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
       status: 1,
       segments: 2,
       level0: 3,
-      level1: 4
+      level1: 4,
+      notify: 6
     });
     dispatch_dev("SvelteRegisterComponent", {
       component: _assertThisInitialized(_this),
@@ -3456,6 +3508,12 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
     /*level0*/
     ctx[3] === undefined && !("level0" in props)) {
       console.warn("<App> was created without expected prop 'level0'");
+    }
+
+    if (
+    /*notify*/
+    ctx[6] === undefined && !("notify" in props)) {
+      console.warn("<App> was created without expected prop 'notify'");
     }
 
     return _this;
@@ -3509,6 +3567,14 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
     set: function set(value) {
       throw new Error_1$1("<App>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     }
+  }, {
+    key: "notify",
+    get: function get() {
+      throw new Error_1$1("<App>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    },
+    set: function set(value) {
+      throw new Error_1$1("<App>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    }
   }]);
 
   return App;
@@ -3518,14 +3584,14 @@ var App = /*#__PURE__*/function (_SvelteComponentDev) {
 var ignore = [];
 var components = [{
   js: function js() {
-    return import('./index.fa697212.js');
+    return import('./index.164b4da7.js');
   },
-  css: ["legacy/index.fa697212.css","legacy/client.4961f299.css","legacy/animate-page.ed1e4385.css"]
+  css: ["legacy/index.164b4da7.css","legacy/client.3019c3ea.css","legacy/animate-page.546de473.css"]
 }, {
   js: function js() {
-    return import('./about.52811cf6.js');
+    return import('./about.2a79aae5.js');
   },
-  css: ["legacy/client.4961f299.css","legacy/animate-page.ed1e4385.css"]
+  css: ["legacy/client.3019c3ea.css","legacy/animate-page.546de473.css"]
 }];
 var routes = [{
   // index.svelte
@@ -3558,6 +3624,40 @@ function goto(href) {
   location.href = href;
   return new Promise(function (f) {}); // never resolves
 }
+/** Callback to inform of a value updates. */
+
+
+function page_store(value) {
+  var store = writable(value);
+  var ready = true;
+
+  function notify() {
+    ready = true;
+    store.update(function (val) {
+      return val;
+    });
+  }
+
+  function set(new_value) {
+    ready = false;
+    store.set(new_value);
+  }
+
+  function subscribe(run) {
+    var old_value;
+    return store.subscribe(function (value) {
+      if (old_value === undefined || ready && value !== old_value) {
+        run(old_value = value);
+      }
+    });
+  }
+
+  return {
+    notify: notify,
+    set: set,
+    subscribe: subscribe
+  };
+}
 
 var initial_data = typeof __SAPPER__ !== 'undefined' && __SAPPER__;
 var ready = false;
@@ -3567,7 +3667,7 @@ var root_preloaded;
 var current_branch = [];
 var current_query = '{}';
 var stores = {
-  page: writable({}),
+  page: page_store({}),
   preloading: writable(null),
   session: writable(initial_data && initial_data.session)
 };
@@ -3828,7 +3928,7 @@ function _navigate() {
                 if (deep_linked) {
                   scroll = {
                     x: 0,
-                    y: deep_linked.getBoundingClientRect().top
+                    y: deep_linked.getBoundingClientRect().top + scrollY
                   };
                 }
               }
@@ -3878,7 +3978,7 @@ function _render() {
             }
 
             root_component.$set(props);
-            _context3.next = 17;
+            _context3.next = 18;
             break;
 
           case 8:
@@ -3899,7 +3999,8 @@ function _render() {
             props.level0 = {
               props: _context3.t0
             };
-            // first load — remove SSR'd <head> contents
+            props.notify = stores.page.notify; // first load — remove SSR'd <head> contents
+
             _start = document.querySelector('#sapper-head-start');
             end = document.querySelector('#sapper-head-end');
 
@@ -3918,13 +4019,13 @@ function _render() {
               hydrate: true
             });
 
-          case 17:
+          case 18:
             current_branch = branch;
             current_query = JSON.stringify(page.query);
             ready = true;
             session_dirty = false;
 
-          case 21:
+          case 22:
           case "end":
             return _context3.stop();
         }
@@ -4187,8 +4288,19 @@ function prefetch(href) {
 function start(opts) {
   if ('scrollRestoration' in _history) {
     _history.scrollRestoration = 'manual';
-  }
+  } // Adopted from Nuxt.js
+  // Reset scrollRestoration to auto when leaving page, allowing page reload
+  // and back-navigation from other pages to use the browser to restore the
+  // scrolling position.
 
+
+  addEventListener('beforeunload', function () {
+    _history.scrollRestoration = 'auto';
+  }); // Setting scrollRestoration to manual again when returning to this page.
+
+  addEventListener('load', function () {
+    _history.scrollRestoration = 'manual';
+  });
   set_target(opts.target);
   addEventListener('click', handle_click);
   addEventListener('popstate', handle_popstate); // prefetch
@@ -4308,4 +4420,4 @@ start({
   target: document.querySelector('#sapper')
 });
 
-export { transition_out as A, destroy_component as B, space as C, claim_space as D, group_outros as E, check_outros as F, _classCallCheck as G, _assertThisInitialized as H, _getPrototypeOf as I, _possibleConstructorReturn as J, query_selector_all as K, _slicedToArray as L, create_slot as M, get_slot_context as N, get_slot_changes as O, add_render_callback as P, create_in_transition as Q, create_out_transition as R, SvelteComponentDev as S, _inherits as _, children as a, claim_text as b, claim_element as c, dispatch_dev as d, element as e, detach_dev as f, attr_dev as g, toggle_class as h, init as i, add_location as j, insert_dev as k, append_dev as l, listen_dev as m, set_data_dev as n, noop as o, prop_dev as p, bubble as q, empty as r, safe_not_equal as s, text as t, svg_element as u, validate_slots as v, create_component as w, claim_component as x, mount_component as y, transition_in as z };
+export { transition_out as A, destroy_component as B, space as C, claim_space as D, group_outros as E, check_outros as F, _getPrototypeOf as G, _possibleConstructorReturn as H, _classCallCheck as I, _assertThisInitialized as J, query_selector_all as K, _slicedToArray as L, create_slot as M, update_slot as N, add_render_callback as O, create_in_transition as P, create_out_transition as Q, SvelteComponentDev as S, _inherits as _, children as a, claim_text as b, claim_element as c, dispatch_dev as d, element as e, detach_dev as f, attr_dev as g, toggle_class as h, init as i, add_location as j, insert_dev as k, append_dev as l, listen_dev as m, set_data_dev as n, noop as o, prop_dev as p, bubble as q, empty as r, safe_not_equal as s, text as t, svg_element as u, validate_slots as v, create_component as w, claim_component as x, mount_component as y, transition_in as z };

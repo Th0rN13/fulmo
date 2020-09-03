@@ -1,4 +1,4 @@
-import { i as init, s as safe_not_equal, d as dispatch_dev, S as SvelteComponentDev, v as validate_slots, e as element, t as text, c as claim_element, a as children, b as claim_text, f as detach_dev, g as attr_dev, h as toggle_class, j as add_location, k as insert_dev, l as append_dev, m as listen_dev, n as set_data_dev, p as prop_dev, o as noop, q as bubble, r as empty, u as svg_element, w as create_component, x as claim_component, y as mount_component, z as transition_in, A as transition_out, B as destroy_component, C as space, D as claim_space, E as group_outros, F as check_outros, _ as _inherits$1, G as _classCallCheck$1, H as _assertThisInitialized$1, I as _getPrototypeOf$1, J as _possibleConstructorReturn$1, K as query_selector_all, L as _slicedToArray$1 } from './client.4961f299.js';
+import { i as init, s as safe_not_equal, d as dispatch_dev, S as SvelteComponentDev, v as validate_slots, e as element, t as text, c as claim_element, a as children, b as claim_text, f as detach_dev, g as attr_dev, h as toggle_class, j as add_location, k as insert_dev, l as append_dev, m as listen_dev, n as set_data_dev, p as prop_dev, o as noop, q as bubble, r as empty, u as svg_element, w as create_component, x as claim_component, y as mount_component, z as transition_in, A as transition_out, B as destroy_component, C as space, D as claim_space, E as group_outros, F as check_outros, _ as _inherits$1, G as _getPrototypeOf$1, H as _possibleConstructorReturn$1, I as _classCallCheck$1, J as _assertThisInitialized$1, K as query_selector_all, L as _slicedToArray$1 } from './client.3019c3ea.js';
 import _classCallCheck from '@babel/runtime/helpers/esm/classCallCheck';
 import _createClass from '@babel/runtime/helpers/esm/createClass';
 import _assertThisInitialized from '@babel/runtime/helpers/esm/assertThisInitialized';
@@ -6,9 +6,9 @@ import _inherits from '@babel/runtime/helpers/esm/inherits';
 import _possibleConstructorReturn from '@babel/runtime/helpers/esm/possibleConstructorReturn';
 import _getPrototypeOf from '@babel/runtime/helpers/esm/getPrototypeOf';
 import _slicedToArray from '@babel/runtime/helpers/esm/slicedToArray';
-import { A as AnimPage } from './animate-page.ed1e4385.js';
+import { A as AnimPage } from './animate-page.546de473.js';
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file = "home/runner/work/fulmo/fulmo/cmp/Button.svelte";
@@ -16,6 +16,7 @@ var file = "home/runner/work/fulmo/fulmo/cmp/Button.svelte";
 function create_fragment(ctx) {
   var button;
   var t;
+  var mounted;
   var dispose;
   var block = {
     c: function create() {
@@ -41,7 +42,7 @@ function create_fragment(ctx) {
       button.disabled =
       /*disabled*/
       ctx[1];
-      attr_dev(button, "class", "button svelte-12a58e4");
+      attr_dev(button, "class", "button svelte-1w9eqbw");
       toggle_class(button, "disabled",
       /*disabled*/
       ctx[1]);
@@ -50,13 +51,16 @@ function create_fragment(ctx) {
       ctx[2]);
       add_location(button, file, 6, 0, 101);
     },
-    m: function mount(target, anchor, remount) {
+    m: function mount(target, anchor) {
       insert_dev(target, button, anchor);
       append_dev(button, t);
-      if (remount) dispose();
-      dispose = listen_dev(button, "click",
-      /*click_handler*/
-      ctx[3], false, false, false);
+
+      if (!mounted) {
+        dispose = listen_dev(button, "click",
+        /*click_handler*/
+        ctx[3], false, false, false);
+        mounted = true;
+      }
     },
     p: function update(ctx, _ref) {
       var _ref2 = _slicedToArray(_ref, 1),
@@ -96,6 +100,7 @@ function create_fragment(ctx) {
     o: noop,
     d: function destroy(detaching) {
       if (detaching) detach_dev(button);
+      mounted = false;
       dispose();
     }
   };
@@ -128,7 +133,7 @@ function instance($$self, $$props, $$invalidate) {
     bubble($$self, event);
   }
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("title" in $$props) $$invalidate(0, title = $$props.title);
     if ("disabled" in $$props) $$invalidate(1, disabled = $$props.disabled);
     if ("loading" in $$props) $$invalidate(2, loading = $$props.loading);
@@ -218,7 +223,7 @@ var Button = /*#__PURE__*/function (_SvelteComponentDev) {
   return Button;
 }(SvelteComponentDev);
 
-function _createSuper$1(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$1()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file$1 = "home/runner/work/fulmo/fulmo/cmp/SvgIcon.svelte"; // (34:15) 
@@ -510,7 +515,7 @@ function instance$1($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("SvgIcon", $$slots, []);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("check" in $$props) $$invalidate(0, check = $$props.check);
     if ("lock" in $$props) $$invalidate(1, lock = $$props.lock);
     if ("radio" in $$props) $$invalidate(2, radio = $$props.radio);
@@ -633,14 +638,15 @@ var SvgIcon = /*#__PURE__*/function (_SvelteComponentDev) {
   return SvgIcon;
 }(SvelteComponentDev);
 
-function _createSuper$2(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct$2()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 var file$2 = "home/runner/work/fulmo/fulmo/cmp/Checkbox.svelte"; // (10:4) {#if checked}
 
 function create_if_block$1(ctx) {
+  var svgicon;
   var current;
-  var svgicon = new SvgIcon({
+  svgicon = new SvgIcon({
     props: {
       icon: "check"
     },
@@ -736,9 +742,9 @@ function create_fragment$2(ctx) {
       input.checked =
       /*checked*/
       ctx[0];
-      attr_dev(input, "class", "svelte-152445p");
+      attr_dev(input, "class", "svelte-7x4qiu");
       add_location(input, file$2, 7, 2, 122);
-      attr_dev(div, "class", "border svelte-152445p");
+      attr_dev(div, "class", "border svelte-7x4qiu");
       toggle_class(div, "checked",
       /*checked*/
       ctx[0]);
@@ -772,13 +778,17 @@ function create_fragment$2(ctx) {
       if (
       /*checked*/
       ctx[0]) {
-        if (!if_block) {
+        if (if_block) {
+          if (dirty &
+          /*checked*/
+          1) {
+            transition_in(if_block, 1);
+          }
+        } else {
           if_block = create_if_block$1(ctx);
           if_block.c();
           transition_in(if_block, 1);
           if_block.m(div, null);
-        } else {
-          transition_in(if_block, 1);
         }
       } else if (if_block) {
         group_outros();
@@ -839,7 +849,7 @@ function instance$2($$self, $$props, $$invalidate) {
       $$scope = $$props.$$scope;
   validate_slots("Checkbox", $$slots, []);
 
-  $$self.$set = function ($$props) {
+  $$self.$$set = function ($$props) {
     if ("checked" in $$props) $$invalidate(0, checked = $$props.checked);
     if ("label" in $$props) $$invalidate(1, label = $$props.label);
   };
@@ -918,28 +928,31 @@ var Checkbox = /*#__PURE__*/function (_SvelteComponentDev) {
   return Checkbox;
 }(SvelteComponentDev);
 
-function _createSuper$3(Derived) { return function () { var Super = _getPrototypeOf$1(Derived), result; if (_isNativeReflectConstruct$3()) { var NewTarget = _getPrototypeOf$1(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn$1(this, result); }; }
+function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf$1(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf$1(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn$1(this, result); }; }
 
 function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function create_default_slot(ctx) {
+  var button;
   var t0;
+  var checkbox0;
   var t1;
+  var checkbox1;
   var current;
-  var button = new Button({
+  button = new Button({
     props: {
       title: "Main Page"
     },
     $$inline: true
   });
-  var checkbox0 = new Checkbox({
+  checkbox0 = new Checkbox({
     props: {
       label: "Remember me",
       checked: true
     },
     $$inline: true
   });
-  var checkbox1 = new Checkbox({
+  checkbox1 = new Checkbox({
     props: {
       label: "Remember me"
     },
@@ -1002,8 +1015,9 @@ function create_default_slot(ctx) {
 
 function create_fragment$3(ctx) {
   var t;
+  var animpage;
   var current;
-  var animpage = new AnimPage({
+  animpage = new AnimPage({
     props: {
       $$slots: {
         default: [create_default_slot]
